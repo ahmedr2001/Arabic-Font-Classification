@@ -91,7 +91,7 @@ def contruct_codebook(training_images):
   # Generate the codebook using K-means clustering
   codebook = generate_codebook(np.vstack(all_descriptors), codebook_size)
 
-  return 
+  return codebook
 
 # BoF Vector Construction Stage
 def construct_bof_vector(image, codebook):

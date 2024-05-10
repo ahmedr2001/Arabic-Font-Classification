@@ -1,2 +1,4 @@
 archive
 fonts-dataset
+*.jpg
+__pycache__

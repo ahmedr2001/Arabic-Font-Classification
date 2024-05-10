@@ -47,7 +47,7 @@ def otsu_thresholding(image):
     count_ones = np.count_nonzero(thresh == 255)
     count_zeros = np.count_nonzero(thresh == 0)
 
-    if count_ones < count_zeros:
+    if count_ones > count_zeros:
       thresh = 255 - thresh
 
     return thresh
