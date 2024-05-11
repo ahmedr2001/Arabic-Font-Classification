@@ -1,6 +1,9 @@
+dataset/*
+local temp/*
 archive
 fonts-dataset
 *.jpg
 *.png
 *.jpeg
 __pycache__
+/dataset_gen/local temp
