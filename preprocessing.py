@@ -88,10 +88,12 @@ def skew_angle_hough_transform(image):
     # round the angles to 2 decimal places and find the most common angle.
     most_common_angle = mode(np.around(angles, decimals=2))[0]
     
-    print(f"Most common angle: {most_common_angle}")
+    # Check if most_common_angle is NaN
+    if np.isnan(most_common_angle):
+        most_common_angle = 0
+
     # convert the angle to degree for rotation.
     skew_angle = np.rad2deg(most_common_angle - np.pi/2)
-    print("-pi/2:", np.rad2deg(-np.pi/2))
     return skew_angle
 
 def rotate_image(image, angle_degrees):
@@ -116,6 +118,50 @@ def sharpen_image(image, kernel_size=5):
 
     return sharpened_image
 
+def variance_of_laplacian(image):
+    return cv2.Laplacian(image, cv2.CV_64F).var()
+
+def preprocess(image, median_kernel_size=3, sharpen_kernel_size=3):
+    """
+    Preprocesses an image by applying median filtering, Otsu's thresholding, and histogram equalization.
+
+    Args:
+        image: Grayscale image with text (any color) and black or white background.
+        median_kernel_size: Kernel size for the median filter.
+        sharpen_kernel_size: Kernel size for the sharpening filter.
+
+    Returns:
+        preprocessed_image: Binary image where text pixels are set to 255 and background pixels are set to 0.
+    """
+    
+    # Apply median filter
+    median_filtered_image = median_filter(image, median_kernel_size)
+
+    # Detect salt and pepper noise
+    # Check difference between original image and median filtered image
+    noise = np.abs(image - median_filtered_image)
+    noise = np.sum(noise) / (image.shape[0] * image.shape[1])
+
+    if (noise > 60):
+        image = median_filtered_image
+
+    # Get variance of Laplacian
+    laplacian_var = variance_of_laplacian(image)
+
+    # Apply image sharpening
+    sharpened_image = sharpen_image(image, sharpen_kernel_size)
+
+    if (laplacian_var < 50):
+        image = sharpened_image
+
+    # Apply Otsu's thresholding
+    image = otsu_thresholding(image)
+
+    # Apply skew angle correction
+    skew_angle = skew_angle_hough_transform(image)
+    image = rotate_image(image, skew_angle)
+
+    return image
 # Not finished Yet
 
 # Text rotation
