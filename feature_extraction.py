@@ -61,14 +61,24 @@ def contruct_codebook(training_images):
     if(features is not None):
       all_descriptors.extend(features)  # Combine features from all images
       i += 1
-      print(i)
+      print(i,'1')
     else:
        print("None")
   # Define desired codebook size (number of visual words)
   codebook_size = 360  # Example value, adjust based on your needs
 
+
+
   # Generate the codebook using K-means clustering
   codebook = generate_codebook(all_descriptors, codebook_size)
+  
+  # K-means clustering
+  kmeans = KMeans(n_clusters=codebook_size)
+  kmeans.fit(all_descriptors)
+  codebook = kmeans.cluster_centers_
+  
+  np.save('codebook.npy', codebook)
+
 
   return codebook
 
