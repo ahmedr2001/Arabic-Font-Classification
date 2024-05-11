@@ -5,56 +5,30 @@ from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
 
 
-# Feature Extraction Stage
 def extract_features(image):
-  """
-  Extracts features from an image using dense sampling, SIFT descriptors, and PCA.
-
-  Args:
-      image: A grayscale or color image represented as a NumPy array.
-
-  Returns:
-      A NumPy array containing the reduced-dimensionality features.
-  """
-
-  # Convert to grayscale if necessary
-  if len(image.shape) == 3:
-    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-  else:
-    gray_image = image
-
-  # Dense sampling
-  patches = []
-  grid_sizes = [16, 24, 32, 40]
-  stride = 8  # Step size between patches
-
-  for grid_size in grid_sizes:
-    for y in range(0, gray_image.shape[0], stride):
-      for x in range(0, gray_image.shape[1], stride):
-        # Ensure patch stays within image boundaries
-        end_y = min(y + grid_size, gray_image.shape[0])
-        end_x = min(x + grid_size, gray_image.shape[1])
-        patch = gray_image[y:end_y, x:end_x]
-        patches.append(patch)
-
-  # SIFT descriptor calculation
-  descriptors = []
-  sift = cv2.xfeatures2d.SIFT_create()
-  for patch in patches:
-    keypoints, descriptor = sift.detectAndCompute(patch, None)
-    # Check if patch has keypoints (avoid empty descriptors)
-    if descriptor is not None:
-      descriptors.append(descriptor)
-
-  # PCA dimensionality reduction (assuming a pre-trained PCA object exists)
-  if len(descriptors) > 0:  # Check if there are any descriptors before applying PCA
-    pca = PCA(n_components=64)  # Assuming pre-trained PCA with 64 components
-    reduced_descriptors = pca.transform(np.vstack(descriptors))
-  else:
-    reduced_descriptors = np.zeros((0, 64))  # Return empty array if no descriptors
-
-  return reduced_descriptors
-
+    sift = cv2.SIFT_create()
+    keypoints, descriptors = sift.detectAndCompute(image, None)
+    
+    if descriptors is None:
+        return None
+    
+    if descriptors.shape[0] == 0:
+        return None
+    
+    
+    # Pad or truncate descriptors to a fixed length (e.g., 128 dimensions)
+    max_descriptors = 128
+    if descriptors.shape[0] < max_descriptors:
+        # Pad with zeros
+        padded_descriptors = np.zeros((max_descriptors, descriptors.shape[1]), dtype=descriptors.dtype)
+        padded_descriptors[:descriptors.shape[0], :] = descriptors
+        descriptors = padded_descriptors
+    
+    # Perform PCA for dimensionality reduction
+    pca = PCA(n_components=64)
+    reduced_descriptors = pca.fit_transform(descriptors)
+    
+    return reduced_descriptors
 
 # Codebook Codebook
 def generate_codebook(descriptors, codebook_size):
@@ -81,15 +55,20 @@ def generate_codebook(descriptors, codebook_size):
 def contruct_codebook(training_images):
   # Collect feature descriptors from training data
   all_descriptors = []
+  i = 0
   for image in training_images:
     features = extract_features(image)
-    all_descriptors.extend(features)  # Combine features from all images
-
+    if(features is not None):
+      all_descriptors.extend(features)  # Combine features from all images
+      i += 1
+      print(i)
+    else:
+       print("None")
   # Define desired codebook size (number of visual words)
-  codebook_size = 2048  # Example value, adjust based on your needs
+  codebook_size = 360  # Example value, adjust based on your needs
 
   # Generate the codebook using K-means clustering
-  codebook = generate_codebook(np.vstack(all_descriptors), codebook_size)
+  codebook = generate_codebook(all_descriptors, codebook_size)
 
   return codebook
 
@@ -119,11 +98,3 @@ def construct_bof_vector(image, codebook):
   bof_vector = np.normalize(bof_vector)  # Normalize to unit length
 
   return bof_vector
-
-
-# Pipeline
-def arabic_font_recognition(image, codebook):
-  bof_vector = construct_bof_vector(image, codebook)
-  # Train a classifier (e.g., SVM, KNN) on a dataset of BoF vectors and corresponding font labels
-  predicted_font = classifier.predict(bof_vector)
-  return predicted_font

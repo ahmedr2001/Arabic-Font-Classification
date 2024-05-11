@@ -24,11 +24,9 @@ def display_image(image, title="Image"):
     plt.show()
 
 def read_image(path):
-    image = cv2.imread(path)
+    image = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
 
-    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
-    return gray_image
+    return image
 
 def otsu_thresholding(image):
     """
@@ -121,7 +119,7 @@ def sharpen_image(image, kernel_size=5):
 def variance_of_laplacian(image):
     return cv2.Laplacian(image, cv2.CV_64F).var()
 
-def preprocess(image, median_kernel_size=3, sharpen_kernel_size=3):
+def preprocess(image_path, median_kernel_size=3, sharpen_kernel_size=3):
     """
     Preprocesses an image by applying median filtering, Otsu's thresholding, and histogram equalization.
 
@@ -135,6 +133,9 @@ def preprocess(image, median_kernel_size=3, sharpen_kernel_size=3):
     """
     
     # Apply median filter
+
+    image = read_image(image_path)
+
     median_filtered_image = median_filter(image, median_kernel_size)
 
     # Detect salt and pepper noise
