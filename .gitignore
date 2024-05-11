@@ -1,3 +1,5 @@
+dataset/*
+local temp/*
 archive
 fonts-dataset
 *.jpg
