@@ -88,8 +88,10 @@ def skew_angle_hough_transform(image):
     # round the angles to 2 decimal places and find the most common angle.
     most_common_angle = mode(np.around(angles, decimals=2))[0]
     
+    print(f"Most common angle: {most_common_angle}")
     # convert the angle to degree for rotation.
     skew_angle = np.rad2deg(most_common_angle - np.pi/2)
+    print("-pi/2:", np.rad2deg(-np.pi/2))
     return skew_angle
 
 def rotate_image(image, angle_degrees):
@@ -103,6 +105,16 @@ def rotate_image(image, angle_degrees):
     rotated_image = cv2.warpAffine(image, rotation_matrix, (width, height))
 
     return rotated_image
+
+def sharpen_image(image, kernel_size=5):
+    # Define the sharpening kernel
+    kernel = np.ones((kernel_size, kernel_size)) * -1
+    kernel[kernel_size // 2, kernel_size // 2] = kernel_size ** 2
+    
+    # Apply the kernel
+    sharpened_image = cv2.filter2D(image, -1, kernel)
+
+    return sharpened_image
 
 # Not finished Yet
 
