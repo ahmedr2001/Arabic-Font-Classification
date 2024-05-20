@@ -2,7 +2,7 @@
 This is an arabic font classifier that based on a given sample of images containing arabic paragraphs classifies the paragraph as one of four fonts: IBM Plex Sans Arabic, Lemonada, Marhey, Scheherazade New. This was a winning model 🥇 in the competition that corresponded to the project in fulfillment of the classwork requirements of our pattern recognition course, achieiving <b>99.2%</b> accuracy and making <b>1000</b> predictions in only <b>429</b> seconds.
 
 ## Datasets & Preprocessing 💾 
-The dataset can be found <a href="https://www.kaggle.com/datasets/breathemath/fonts-dataset-cmp">here</a>. It is stored in the "fonts-dataset" folder. For preprocessing, we try our best to remove noise from the image without affecting the original image itself, since we rely on SIFT for feature extraction. We apply a median filter for salt and pepper noise followed by sharpening to remove blur (if needed). Finally, we binarize the image via otsu thresholding. The relevant file is "preprocessing.py". <br> <br>
+The dataset can be found <a href="https://www.kaggle.com/datasets/breathemath/fonts-dataset-cmp">here</a>. For preprocessing, we try our best to remove noise from the image without affecting the original image itself, since we rely on SIFT for feature extraction. We apply a median filter for salt and pepper noise followed by sharpening to remove blur (if needed). Finally, we binarize the image via otsu thresholding. The relevant file is "preprocessing.py". <br> <br>
 This is a sample from the dataset: <br>
 ![0](https://github.com/ahmedr2001/Arabic-Font-Classification/assets/77215230/bc211430-5d90-4b9a-a195-262ed2d5d36a)
 
