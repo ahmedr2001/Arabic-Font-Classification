@@ -133,8 +133,7 @@ def preprocess(image, median_kernel_size=3, sharpen_kernel_size=3):
     """
     
     # Apply median filter
-
-    # image = read_image(image_path)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     median_filtered_image = median_filter(image, median_kernel_size)
 
@@ -158,22 +157,4 @@ def preprocess(image, median_kernel_size=3, sharpen_kernel_size=3):
     # Apply Otsu's thresholding
     image = otsu_thresholding(image)
 
-    # Apply skew angle correction
-    skew_angle = skew_angle_hough_transform(image)
-    image = rotate_image(image, skew_angle)
-
     return image
-# Not finished Yet
-
-# Text rotation
-# Text alignment
-# Text size/weight
-# Image blur
-
-
-# Finished
-# Text rotationsssssssss
-# Text color
-# Salt and pepper noise
-# Brightness variation
-
