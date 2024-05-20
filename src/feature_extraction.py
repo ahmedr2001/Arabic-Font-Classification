@@ -25,7 +25,7 @@ def histogram_from_sift(image, centers):
     return histogram
 
 def kmeans_centers():
-    kmeans = load('models/kmeans_model.pkl')
+    kmeans = load('../models/kmeans_model.pkl')
     return kmeans.cluster_centers_
 
 

@@ -8,8 +8,8 @@ from preprocessing import preprocess
 from feature_extraction import histogram_from_sift 
 
 # Define paths & Params
-classifier_path = "models\knn_model.pkl"
-kmeans_path     = "models\kmeans_model.pkl"
+classifier_path = "..\models\knn_model.pkl"
+kmeans_path     = "..\models\kmeans_model.pkl"
 
 kmeans = load(kmeans_path)
 centers = kmeans.cluster_centers_
