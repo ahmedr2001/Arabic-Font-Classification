@@ -14,4 +14,4 @@ We first considered line, word, and character segmentation. We had made signific
 We have considered NN, KNN, SVM. Because both accuracy and performance mattered for the project (along with other constraints) only SVM made it to the final model. Additionally, SVM is suitable when the dataset isn't large but the features are complex, which was our case. 
 
 ## Running the Project 🚀
-To test the final model, run "predict.ipynb". To train your own models using our features, run "train.ipynb". You can run <code>pip install -r requirements.txt</code> to install all dependencies. If you would like to use a browser, our model is deployed at <a href="https://ahmedr2001.pythonanywhere.com">ahmedr2001.pythonanywhere.com</a>.
+To test the final model, run "predict.ipynb". To train your own models using our features, run "train.ipynb". You can run <code>pip install -r requirements.txt</code> to install all dependencies.
